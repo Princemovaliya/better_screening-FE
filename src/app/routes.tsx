@@ -12,6 +12,7 @@ import { InterviewsListPage } from '@/features/interviews/InterviewsListPage';
 import { JobDetailsPage } from '@/features/jobs/JobDetailsPage';
 import { JobFormPage } from '@/features/jobs/JobFormPage';
 import { JobsListPage } from '@/features/jobs/JobsListPage';
+import { AcceptInvitePage } from '@/features/org-onboarding/AcceptInvitePage';
 import { SignupPage } from '@/features/org-onboarding/SignupPage';
 import { SettingsPage } from '@/features/settings/SettingsPage';
 
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
   { path: '/', element: <Navigate to="/login" replace /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/signup', element: <SignupPage /> },
+  { path: '/accept-invite', element: <AcceptInvitePage /> },
   {
     path: '/app',
     element: (

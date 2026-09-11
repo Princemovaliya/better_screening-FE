@@ -1,5 +1,5 @@
 import { api } from './client';
-import type { AuthResponse } from './types';
+import type { AuthResponse, PublicUser, UserRole } from './types';
 
 export interface SignupPayload {
   fullName: string;
@@ -30,4 +30,6 @@ export const authApi = {
     api.post<{ message: string }>('/auth/reset-password', { token, newPassword }, { auth: false }),
   acceptInvite: (payload: AcceptInvitePayload) =>
     api.post<AuthResponse>('/auth/accept-invite', payload, { auth: false }),
+  invite: (email: string, role: UserRole) =>
+    api.post<PublicUser>('/auth/invite', { email, role }),
 };

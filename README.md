@@ -5,7 +5,7 @@ React + Vite + TypeScript, styled with Tailwind CSS. See the full architecture a
 build plan at `/home/prince/.claude/plans/hi-this-is-merry-milner.md` (or wherever it's
 been moved to in this repo going forward).
 
-## Status: Phase 5 — LLM-powered recruiter features
+## Status: Phase 6 — notifications, dashboard, team management (polish)
 
 What's implemented so far:
 - Vite + React + TypeScript scaffold, Tailwind CSS v4 (via `@tailwindcss/vite`), path
@@ -71,9 +71,32 @@ What's implemented so far:
   submit → transcript → evaluation pipeline run rendering correctly on the interview
   details page — zero console errors throughout.
 
-Not yet built: dashboard KPIs/charts/activity feed, team management, settings pages,
-and a push/SSE layer for AI results (current mechanism is `refetchInterval` polling
-while evaluation is non-terminal).
+- **Dashboard**: real KPI cards (open jobs, candidates, interviews this week, avg AI
+  evaluation score), a candidate-pipeline funnel (bar per stage), and a recent-activity
+  feed — all backed by `GET /dashboard`.
+- **Settings** (`/app/settings`, tabbed): "Company & AI" (org name, AI-round toggle,
+  default round duration/timezone), "Notifications" (evaluation-ready /
+  new-application toggles), and — admin-only — "Team" (member list with role
+  dropdown and remove, an invite modal, all three server-side protections
+  (self-removal, last-admin demote, last-admin remove) surfaced as inline errors).
+- **Accept-invite** (`/accept-invite?token=...`, public route — note: a query param,
+  not a path param, matching the backend's invite-link format): set your name and
+  password, then land signed in on the dashboard.
+- **Notifications bell** (recruiter shell topbar): unread-count badge polling every
+  20s, a dropdown listing recent notifications, click-to-navigate-and-mark-read, and
+  mark-all-read. Fed by `EvaluationModule`'s "AI evaluation ready" notification (and
+  extensible to other types later) — no push/SSE, `refetchInterval` polling per the
+  plan's v1 real-time strategy.
+- Verified end-to-end in a real browser: signup → empty-state dashboard renders
+  without crashing → create a job → dashboard now shows the KPI and activity entry →
+  all three settings tabs → invite a team member → appears in the team list →
+  separately, accepting that invite via the actual `/accept-invite` link → landing
+  signed in → confirming a non-admin recruiter's Settings has no Team tab — zero
+  console errors throughout.
+
+Not yet built: global search (the plan's `SearchModule` — deferred; there's no
+public-facing search surface yet to justify it) and a personal profile-editing page
+(no backend endpoint for a user editing their own name/avatar exists yet).
 
 ## Getting started
 

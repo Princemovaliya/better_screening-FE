@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { NavLink, Outlet } from 'react-router-dom';
+import { NotificationsBell } from '@/components/patterns/NotificationsBell';
 import { Logo } from '@/components/ui';
 import { useAuth } from '@/context/AuthContext';
 import { useOrg } from '@/context/OrgContext';
@@ -54,6 +55,9 @@ export function RecruiterShellLayout() {
         </div>
       </aside>
       <main className="pl-[240px] min-h-screen">
+        <div className="h-16 flex items-center justify-end px-6 border-b border-ink-100 bg-white">
+          <NotificationsBell />
+        </div>
         <Outlet />
       </main>
     </div>
