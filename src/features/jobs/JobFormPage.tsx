@@ -280,7 +280,13 @@ export function JobFormPage() {
                     <Input type="number" min={5} {...register(`rounds.${i}.durationMinutes`)} />
                   </Field>
                 </div>
-                <RoundQuestionsFieldArray control={control} register={register} roundIndex={i} />
+                <RoundQuestionsFieldArray
+                  control={control}
+                  register={register}
+                  roundIndex={i}
+                  jobId={editId}
+                  roundId={existingJob?.rounds[i]?.id}
+                />
               </div>
             ))}
           </div>

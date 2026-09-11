@@ -5,7 +5,7 @@ React + Vite + TypeScript, styled with Tailwind CSS. See the full architecture a
 build plan at `/home/prince/.claude/plans/hi-this-is-merry-milner.md` (or wherever it's
 been moved to in this repo going forward).
 
-## Status: Phase 3 — storage + candidate portal skeleton
+## Status: Phase 5 — LLM-powered recruiter features
 
 What's implemented so far:
 - Vite + React + TypeScript scaffold, Tailwind CSS v4 (via `@tailwindcss/vite`), path
@@ -52,9 +52,28 @@ What's implemented so far:
   flows (job creation, candidate creation, interview scheduling) — zero console
   errors throughout.
 
+- **AI question generation**: in the job edit form, once a round is saved (has a real
+  backend id), a "✨ Generate with AI" button suggests new questions for that round —
+  appended into the editable field array, nothing persisted until the recruiter saves.
+- **AI email composer**: from a candidate's details page, "Compose email" opens a
+  modal — pick a type, optionally tie it to an interview, optionally add guidance,
+  "Compose with AI" drafts a subject/body the recruiter can edit before sending. Sent
+  emails are logged and shown in an "Emails" history section on the same page.
+- **AI evaluation** (interview details page): once a candidate's round is submitted,
+  an "AI Evaluation" card polls for status (`transcribing` → `evaluating` →
+  `completed`, or `transcription_failed`) and renders the full result once ready —
+  overall score, recommendation, the 5 competency scores, strengths/weaknesses,
+  communication note, and per-question score+feedback inline with each question. A
+  "Retry evaluation" action is available while non-terminal.
+- Verified end-to-end in a real browser: job creation → AI-generate 5 questions on a
+  round → save → candidate creation → AI-compose → edit → send an email (landed in
+  Maildev) → logged in the candidate's email history; separately, a full
+  submit → transcript → evaluation pipeline run rendering correctly on the interview
+  details page — zero console errors throughout.
+
 Not yet built: dashboard KPIs/charts/activity feed, team management, settings pages,
-and the BullMQ-driven async AI pipeline / polling layer for results (deferred to
-later phases per the plan's build order).
+and a push/SSE layer for AI results (current mechanism is `refetchInterval` polling
+while evaluation is non-terminal).
 
 ## Getting started
 

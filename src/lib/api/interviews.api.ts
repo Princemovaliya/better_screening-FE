@@ -22,4 +22,5 @@ export const interviewsApi = {
     api.patch<Interview>(`/interviews/${id}`, input),
   sendInvitation: (id: string) => api.post<Interview>(`/interviews/${id}/send-invitation`),
   cancel: (id: string) => api.post<Interview>(`/interviews/${id}/cancel`),
+  retryEvaluation: (id: string) => api.post<Interview>(`/interviews/${id}/retry-evaluation`),
 };

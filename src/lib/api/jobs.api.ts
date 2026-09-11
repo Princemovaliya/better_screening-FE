@@ -1,5 +1,11 @@
 import { api } from './client';
-import type { Job, JobInput, JobStatus } from './jobs.types';
+import type {
+  GeneratedQuestion,
+  GenerateQuestionsInput,
+  Job,
+  JobInput,
+  JobStatus,
+} from './jobs.types';
 import { toQueryString } from './queryString';
 
 export interface ListJobsParams {
@@ -14,4 +20,6 @@ export const jobsApi = {
   create: (input: JobInput) => api.post<Job>('/jobs', input),
   update: (id: string, input: Partial<JobInput>) => api.patch<Job>(`/jobs/${id}`, input),
   remove: (id: string) => api.delete<void>(`/jobs/${id}`),
+  generateQuestions: (jobId: string, roundId: string, input: GenerateQuestionsInput = {}) =>
+    api.post<GeneratedQuestion[]>(`/jobs/${jobId}/rounds/${roundId}/questions/generate`, input),
 };

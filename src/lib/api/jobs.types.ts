@@ -76,6 +76,18 @@ export interface RoundTemplateInput {
   questions?: RoundQuestionInput[];
 }
 
+/** A suggestion only — not persisted until the recruiter keeps it and saves the
+ * round via the normal job-update endpoint. */
+export interface GeneratedQuestion {
+  questionText: string;
+  questionType: QuestionType;
+}
+
+export interface GenerateQuestionsInput {
+  count?: number;
+  additionalContext?: string;
+}
+
 export interface JobInput {
   title: string;
   department: string;

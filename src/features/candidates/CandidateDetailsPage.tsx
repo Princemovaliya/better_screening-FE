@@ -5,9 +5,12 @@ import { Badge, Button, Card, Textarea } from '@/components/ui';
 import { useOrg } from '@/context/OrgContext';
 import { candidatesApi } from '@/lib/api/candidates.api';
 import { CANDIDATE_STAGE_LABELS, CANDIDATE_STAGES, type CandidateStage } from '@/lib/api/candidates.types';
+import { emailComposerApi } from '@/lib/api/email-composer.api';
+import { EMAIL_TYPE_LABELS } from '@/lib/api/email-composer.types';
 import { interviewsApi } from '@/lib/api/interviews.api';
 import { INTERVIEW_STATUS_LABELS, type InterviewStatus } from '@/lib/api/interviews.types';
 import { queryKeys } from '@/lib/api/queryKeys';
+import { EmailComposerModal } from './EmailComposerModal';
 import { ScheduleInterviewModal } from '@/features/interviews/ScheduleInterviewModal';
 
 const STAGE_TONE: Record<CandidateStage, 'sky' | 'amber' | 'brand' | 'violet' | 'fuchsia' | 'green' | 'rose'> = {
@@ -36,6 +39,7 @@ export function CandidateDetailsPage() {
   const queryClient = useQueryClient();
   const [noteText, setNoteText] = useState('');
   const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [composeOpen, setComposeOpen] = useState(false);
 
   const { data: candidate, isLoading } = useQuery({
     queryKey: queryKeys.candidate(organization?.id ?? '', id ?? ''),
@@ -46,6 +50,12 @@ export function CandidateDetailsPage() {
   const { data: interviews } = useQuery({
     queryKey: queryKeys.interviews(organization?.id ?? '', { candidateId: id }),
     queryFn: () => interviewsApi.list({ candidateId: id }),
+    enabled: !!id,
+  });
+
+  const { data: emails } = useQuery({
+    queryKey: queryKeys.candidateEmails(organization?.id ?? '', id ?? ''),
+    queryFn: () => emailComposerApi.list(id!),
     enabled: !!id,
   });
 
@@ -133,6 +143,9 @@ export function CandidateDetailsPage() {
             </select>
             <Button variant="ai" onClick={() => setScheduleOpen(true)}>
               Schedule interview
+            </Button>
+            <Button variant="secondary" onClick={() => setComposeOpen(true)}>
+              ✉️ Compose email
             </Button>
             <Button
               variant="secondary"
@@ -228,6 +241,27 @@ export function CandidateDetailsPage() {
               </Button>
             </div>
           </Card>
+
+          <Card className="p-5">
+            <h2 className="font-bold text-ink-900 text-lg mb-3">Emails</h2>
+            {!emails || emails.length === 0 ? (
+              <p className="text-sm text-ink-400">No emails sent yet.</p>
+            ) : (
+              <div className="space-y-2.5">
+                {emails.map((e) => (
+                  <div key={e.id} className="rounded-lg bg-ink-50 p-3">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <p className="font-semibold text-[13px] text-ink-800">{e.subject}</p>
+                      <Badge tone="slate">{EMAIL_TYPE_LABELS[e.type]}</Badge>
+                    </div>
+                    <p className="text-[11px] text-ink-400 mt-1">
+                      {e.sentBy?.name ?? 'Someone'} · {new Date(e.sentAt).toLocaleString()}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
         </div>
 
         <div className="space-y-5">
@@ -268,6 +302,12 @@ export function CandidateDetailsPage() {
           candidate={candidate}
         />
       )}
+      <EmailComposerModal
+        open={composeOpen}
+        onClose={() => setComposeOpen(false)}
+        candidateId={id!}
+        interviews={interviews}
+      />
     </div>
   );
 }

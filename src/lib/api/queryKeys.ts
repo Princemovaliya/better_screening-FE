@@ -18,4 +18,9 @@ export const queryKeys = {
   interviews: (orgId: string, filters?: Record<string, unknown>) =>
     ['org', orgId, 'interviews', filters ?? {}] as const,
   interview: (orgId: string, id: string) => ['org', orgId, 'interviews', id] as const,
+  interviewEvaluation: (orgId: string, interviewId: string) =>
+    ['org', orgId, 'interviews', interviewId, 'evaluation'] as const,
+
+  candidateEmails: (orgId: string, candidateId: string) =>
+    ['org', orgId, 'candidates', candidateId, 'emails'] as const,
 };
