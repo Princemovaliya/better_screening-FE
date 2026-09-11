@@ -5,7 +5,7 @@ React + Vite + TypeScript, styled with Tailwind CSS. See the full architecture a
 build plan at `/home/prince/.claude/plans/hi-this-is-merry-milner.md` (or wherever it's
 been moved to in this repo going forward).
 
-## Status: Phase 2 — core hiring CRUD
+## Status: Phase 3 — storage + candidate portal skeleton
 
 What's implemented so far:
 - Vite + React + TypeScript scaffold, Tailwind CSS v4 (via `@tailwindcss/vite`), path
@@ -32,11 +32,29 @@ What's implemented so far:
   (candidate stage auto-advances) → edit an existing job (values pre-populate
   correctly) — zero console errors throughout.
 
+- **Candidate interview room** (`/interview-room/:token`, isolated route tree, no
+  recruiter code/data reachable): landing → device check (camera/mic preview) →
+  one question at a time, each recorded then uploaded before advancing → thank-you
+  screen. A single whole-round countdown (not per-question) is shown throughout and
+  auto-submits on expiry. Reopening the link mid-round resumes at the first
+  unanswered question rather than restarting.
+  - Simplification vs. the original plan: uploads are **blocking per question**
+    (record → upload → then advance) rather than a background queue that lets the
+    candidate start the next question while the previous one still uploads. This
+    still satisfies "nothing is lost on a crash" (each answer is durably stored
+    before moving on) with much less moving-part complexity; a background queue
+    with retry is a reasonable later upgrade if upload latency becomes an issue.
+- Verified end-to-end in a real browser (Playwright, real MediaRecorder via Chrome's
+  fake-device flags, actual presigned uploads to MinIO — not mocked): the full
+  candidate flow (landing → device check → record both questions → thank-you),
+  resuming correctly at question 2 after simulating a crash (with the countdown
+  continuing from the original deadline, not resetting), and the Phase 2 recruiter
+  flows (job creation, candidate creation, interview scheduling) — zero console
+  errors throughout.
+
 Not yet built: dashboard KPIs/charts/activity feed, team management, settings pages,
-the candidate interview-room recording flow (device check → per-question record/
-upload → submit, with a whole-round countdown — see the plan's §3.4), and the
-polling/real-time layer for async AI results (all deferred to later phases per the
-plan's build order).
+and the BullMQ-driven async AI pipeline / polling layer for results (deferred to
+later phases per the plan's build order).
 
 ## Getting started
 

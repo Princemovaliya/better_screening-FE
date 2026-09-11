@@ -6,7 +6,7 @@ import { CandidateDetailsPage } from '@/features/candidates/CandidateDetailsPage
 import { CandidatesListPage } from '@/features/candidates/CandidatesListPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
 import { LoginPage } from '@/features/auth/LoginPage';
-import { InterviewRoomLandingPage } from '@/features/interview-room/InterviewRoomLandingPage';
+import { InterviewRoomPage } from '@/features/interview-room/InterviewRoomPage';
 import { InterviewDetailsPage } from '@/features/interviews/InterviewDetailsPage';
 import { InterviewsListPage } from '@/features/interviews/InterviewsListPage';
 import { JobDetailsPage } from '@/features/jobs/JobDetailsPage';
@@ -43,6 +43,6 @@ export const router = createBrowserRouter([
   {
     path: '/interview-room/:token',
     element: <InterviewRoomLayout />,
-    children: [{ index: true, element: <InterviewRoomLandingPage /> }],
+    children: [{ index: true, element: <InterviewRoomPage /> }],
   },
 ]);
