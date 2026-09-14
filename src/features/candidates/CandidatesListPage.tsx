@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Badge, Button, Card, Input, Select } from '@/components/ui';
 import { useOrg } from '@/context/OrgContext';
 import { candidatesApi } from '@/lib/api/candidates.api';
@@ -20,7 +20,10 @@ const STAGE_TONE: Record<CandidateStage, 'sky' | 'amber' | 'brand' | 'violet' | 
 
 export function CandidatesListPage() {
   const { organization } = useOrg();
-  const [stage, setStage] = useState<CandidateStage | ''>('');
+  const [searchParams] = useSearchParams();
+  const [stage, setStage] = useState<CandidateStage | ''>(
+    (searchParams.get('stage') as CandidateStage | null) ?? '',
+  );
   const [search, setSearch] = useState('');
   const [addOpen, setAddOpen] = useState(false);
 

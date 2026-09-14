@@ -2,6 +2,7 @@ export * from './Badge';
 export * from './Button';
 export * from './Card';
 export * from './Field';
+export * from './icons';
 export * from './Input';
 export * from './Logo';
 export * from './Modal';

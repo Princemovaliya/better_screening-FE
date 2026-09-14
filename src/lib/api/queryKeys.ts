@@ -24,7 +24,7 @@ export const queryKeys = {
   candidateEmails: (orgId: string, candidateId: string) =>
     ['org', orgId, 'candidates', candidateId, 'emails'] as const,
 
-  dashboard: (orgId: string) => ['org', orgId, 'dashboard'] as const,
+  dashboard: (orgId: string, days: number) => ['org', orgId, 'dashboard', days] as const,
   activity: (orgId: string) => ['org', orgId, 'activity'] as const,
   notifications: (orgId: string, unreadOnly?: boolean) =>
     ['org', orgId, 'notifications', unreadOnly ?? false] as const,
